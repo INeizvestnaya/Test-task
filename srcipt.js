@@ -5,23 +5,29 @@ const output = document.querySelector('#output');
 button.addEventListener('click', () => aliceDecrypt(input.value));
 
 const aliceDecrypt = (message) => {
-  let noRepeat = false;
+  let decryptEnd = false;
+
+  const isLetterAdded = (message, letterIndex) => {
+    const cur = message[letterIndex];
+    const next = message[letterIndex + 1];
+    const prev = message[letterIndex - 1];
+
+    return (cur !== prev && cur !== next) || (cur === prev && cur === next);
+  };
 
   const decrypt = (encoded) => {
-    if (noRepeat) {
+    if (decryptEnd) {
       return encoded;
     } else {
       let result = '';
 
-      noRepeat = true;
+      decryptEnd = true;
 
       for (let i = 0; i < encoded.length; i++) {
-        const curLetter = encoded[i];
-
-        if (curLetter !== encoded[i - 1] && curLetter !== encoded[i + 1]) {
-          result += curLetter;
+        if (isLetterAdded(encoded, i)) {
+          result += encoded[i];
         } else {
-          noRepeat = false;
+          decryptEnd = false;
         }
       }
 
